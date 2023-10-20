@@ -34,7 +34,7 @@ for dataset, label_dict in label_data.items():
 
     # imagebind_embeddings[dataset][label_num] = embeddings[ModalityType.TEXT]
     for i, num in enumerate(label_num_list):
-        imagebind_embeddings[dataset][num] = embeddings[ModalityType.TEXT][i]
+        imagebind_embeddings[dataset][num] = embeddings[ModalityType.TEXT][i].tolist()
 
 print(imagebind_embeddings)
 
