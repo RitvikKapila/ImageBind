@@ -6,7 +6,7 @@ import json
 
 f = open('classid_to_labelname_mapping.json')
 
-data = json.load(f)
+label_data = json.load(f)
 
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
@@ -16,12 +16,12 @@ model.eval()
 model.to(device)
 
 imagebind_embeddings = {}
-for dataset, label_dict in data.items():
+for dataset, label_dict in label_data.items():
     # print(dataset, label_dict)
     imagebind_embeddings[dataset] = {}
 
-    label_num_list = list(data[dataset].keys())
-    label_text_list = list(data[dataset].values())
+    label_num_list = list(label_data[dataset].keys())
+    label_text_list = list(label_data[dataset].values())
     print(label_num_list, label_text_list)
 
 
