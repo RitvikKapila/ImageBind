@@ -22,7 +22,7 @@ def get_embeddings(extrapolated_imu_data, device):
         print(time_series.shape)
         # Load data
         inputs = {
-            ModalityType.IMU: torch.from_numpy(time_series),
+            ModalityType.IMU: torch.from_numpy(time_series).to(device),
         }
         with torch.no_grad():
             embeddings = model(inputs)
