@@ -91,13 +91,15 @@ def extrapolate_timeseries(imu_data_path):
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print('Usage: python imu_embedding.py relative_data_path_to_npy_file')
+        assert False, 'Usage: python imu_embedding.py relative_data_path_to_npy_file'
 
     data_path = sys.argv[1]
     extrapolated_data = extrapolate_timeseries(data_path)
 
     
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
+
+    get_embeddings(extrapolated_data, device)
 
 
     # original_data = dataset[0,:,0]
