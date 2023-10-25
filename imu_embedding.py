@@ -20,7 +20,7 @@ def get_embeddings(extrapolated_imu_data, device):
     print(N)
     time_series = extrapolated_imu_data[:,:,:6].astype(np.float32)
     # time_series = np.expand_dims(np.transpose(time_series), axis=0)
-    time_series = np.transpose(time_series)
+    time_series = np.moveaxis(time_series, 1, 2)
     print(time_series.shape)
     # Load data
     inputs = {
