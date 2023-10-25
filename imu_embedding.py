@@ -15,12 +15,9 @@ def get_embeddings(extrapolated_imu_data, device):
 
     N = extrapolated_imu_data.shape[0]  # Number of data points
 
-    # Loop through data points and sensors
-    # for i in range(N):
-    print(N)
-    time_series = extrapolated_imu_data[0,:,:6].astype(np.float32)
-    time_series = np.expand_dims(np.transpose(time_series), axis=0)
-    # time_series = np.moveaxis(time_series, 1, 2)
+    time_series = extrapolated_imu_data[:,:,:6].astype(np.float32)
+    # time_series = np.expand_dims(np.transpose(time_series), axis=0)
+    time_series = np.moveaxis(time_series, 1, 2)
     print(time_series.shape)
     # Load data
     inputs = {
@@ -31,7 +28,7 @@ def get_embeddings(extrapolated_imu_data, device):
 
     imu_embedding = (embeddings[ModalityType.IMU].to("cpu").numpy())
     print(imu_embedding.shape)
-    np.savetxt('single_imu_embedding.txt', imu_embedding, fmt='%f')
+    np.savetxt('dataset_imu_embedding.txt', imu_embedding, fmt='%f')
 
 
 def extrapolate_timeseries(imu_data_path):
