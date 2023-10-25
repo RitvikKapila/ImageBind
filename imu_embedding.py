@@ -31,7 +31,7 @@ def get_embeddings(extrapolated_imu_data, device):
 
     imu_embedding = (embeddings[ModalityType.IMU].to("cpu").numpy())
     print(imu_embedding.shape)
-    np.savetxt('single_imu_embedding.txt', imu_embedding, fmt='%d')
+    np.savetxt('single_imu_embedding.txt', imu_embedding, fmt='%f')
 
 
 def extrapolate_timeseries(imu_data_path):
