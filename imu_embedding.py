@@ -16,20 +16,22 @@ def get_embeddings(extrapolated_imu_data, device):
     N = extrapolated_imu_data.shape[0]  # Number of data points
 
     # Loop through data points and sensors
-    for i in range(N):
-        time_series = extrapolated_imu_data[i,:,:6].astype(np.float32)
-        time_series = np.expand_dims(np.transpose(time_series), axis=0)
-        print(time_series.shape)
-        # Load data
-        inputs = {
-            ModalityType.IMU: torch.from_numpy(time_series).to(device),
-        }
-        with torch.no_grad():
-            embeddings = model(inputs)
+    # for i in range(N):
+    print(N)
+    time_series = extrapolated_imu_data[:,:,:6].astype(np.float32)
+    # time_series = np.expand_dims(np.transpose(time_series), axis=0)
+    time_series = np.transpose(time_series)
+    print(time_series.shape)
+    # Load data
+    inputs = {
+        ModalityType.IMU: torch.from_numpy(time_series).to(device),
+    }
+    with torch.no_grad():
+        embeddings = model(inputs)
 
-        print(embeddings[ModalityType.IMU].tolist())
-        print(embeddings[ModalityType.IMU].shape)
-        break
+    print(embeddings[ModalityType.IMU].tolist())
+    print(embeddings[ModalityType.IMU].shape)
+        # break
     
 
 
