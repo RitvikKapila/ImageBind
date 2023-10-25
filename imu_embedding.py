@@ -13,6 +13,8 @@ def get_embeddings(extrapolated_imu_data, device):
     model.eval()
     model.to(device)
 
+    N = extrapolated_imu_data.shape[0]  # Number of data points
+
     # Loop through data points and sensors
     for i in range(N):
         time_series = extrapolated_imu_data[i,:,:6]
