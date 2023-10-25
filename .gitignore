@@ -5,3 +5,4 @@
 build
 imagebind.egg-info/
 cartopy
+*.png
