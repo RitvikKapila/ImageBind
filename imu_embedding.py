@@ -29,7 +29,7 @@ def get_embeddings(extrapolated_imu_data, device):
     with torch.no_grad():
         embeddings = model(inputs)
 
-    imu_embedding = (embeddings[ModalityType.IMU].numpy())
+    imu_embedding = (embeddings[ModalityType.IMU].to("cpu").numpy())
     print(imu_embedding.shape)
     np.savetxt('dataset_imu_embedding.txt', imu_embedding, fmt='%d')
 
