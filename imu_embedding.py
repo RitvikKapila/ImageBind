@@ -29,10 +29,9 @@ def get_embeddings(extrapolated_imu_data, device):
     with torch.no_grad():
         embeddings = model(inputs)
 
-    print(embeddings[ModalityType.IMU].tolist())
-    print(embeddings[ModalityType.IMU].shape)
-        # break
-    
+    imu_embedding = (embeddings[ModalityType.IMU].numpy())
+    print(imu_embedding.shape)
+    np.savetxt('dataset_imu_embedding.txt', imu_embedding, fmt='%d')
 
 
 def extrapolate_timeseries(imu_data_path):
