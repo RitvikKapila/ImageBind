@@ -18,8 +18,8 @@ def get_embeddings(extrapolated_imu_data, device):
     # Loop through data points and sensors
     for i in range(N):
         time_series = extrapolated_imu_data[i,:,:6]
+        time_series = np.expand_dims(np.transpose(time_series), axis=0)
         print(time_series.shape)
-        time_series = np.transpose(time_series)
         # Load data
         inputs = {
             ModalityType.IMU: torch.from_numpy(time_series),
