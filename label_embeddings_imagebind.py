@@ -4,7 +4,7 @@ from imagebind.models import imagebind_model
 from imagebind.models.imagebind_model import ModalityType
 import json
 
-f = open('classid_to_labelname_mapping.json')
+f = open('labelname_to_labeldescription_mapping.json')
 
 label_data = json.load(f)
 
@@ -38,7 +38,7 @@ for dataset, label_dict in label_data.items():
 
 print(imagebind_embeddings)
 
-with open("label_embeddings_imagebind.json", "w") as write_file:
+with open("labeldescription_embeddings_imagebind.json", "w") as write_file:
     json.dump(imagebind_embeddings, write_file, indent=4)
 
 f.close()
