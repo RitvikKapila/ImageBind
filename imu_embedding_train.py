@@ -40,7 +40,7 @@ def get_embeddings(extrapolated_imu_data, device, out_file):
         else:
             final_embedding = np.concatenate((final_embedding, imu_embedding))
 
-        print(final_embedding.shape)
+        print('final_embedding shape: ', final_embedding.shape)
         
     np.save(out_file, final_embedding)
 
@@ -105,6 +105,7 @@ if __name__ == '__main__':
     if len(sys.argv) != 3:
         assert False, 'Usage: python imu_embedding.py relative_data_path_to_npy_file out_file_name'
 
+    print(sys.argv)
     data_path = sys.argv[1]
     out_file = sys.argv[2]
     extrapolated_data = extrapolate_timeseries(data_path)

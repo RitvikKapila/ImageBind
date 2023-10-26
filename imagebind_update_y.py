@@ -5,6 +5,8 @@ if __name__ == '__main__':
     if len(sys.argv) != 3:
         assert False, 'Usage: python imagebind_update_y.py relative_path_to_npy_file out_file_name'
 
+    print(sys.argv)
+    
     label_file_path = sys.argv[1]
     out_file = sys.argv[2]
     
