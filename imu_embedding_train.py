@@ -18,8 +18,8 @@ def get_embeddings(extrapolated_imu_data, device, out_file):
     N = extrapolated_imu_data.shape[0]  # Number of data points
     num_batches = int(N / batch_size)
     if(N%batch_size != 0):
-        batch_size += 1
-    print(batch_size, num_batches)
+        num_batches += 1
+    # print(batch_size, num_batches)
     final_embedding = np.array([[]])
     # change for different dataset
     for i in range(0, 5):
