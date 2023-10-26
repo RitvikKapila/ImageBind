@@ -98,7 +98,7 @@ def extrapolate_timeseries(imu_data_path, out_file):
 
     plt.tight_layout()  # Adjust subplots for better spacing
 
-    plt.savefig(outfile + ".png")
+    plt.savefig(out_file + ".png")
     return extrapolated_data
 
 if __name__ == '__main__':
