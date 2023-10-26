@@ -7,36 +7,40 @@ import numpy as np
 from scipy.interpolate import interp1d
 import matplotlib.pyplot as plt
 
-def get_embeddings(extrapolated_imu_data, device):
+def get_embeddings(extrapolated_imu_data, device, out_file):
     # Instantiate model
     model = imagebind_model.imagebind_huge(pretrained=True)
     model.eval()
     model.to(device)
 
     N = extrapolated_imu_data.shape[0]  # Number of data points
+    final_embedding = np.array([])
+    for i in range(0, 5):
+        print(i*9, i*9+6)
+        time_series = extrapolated_imu_data[:,:,i*9:i*9+6].astype(np.float32)
+        # time_series = np.expand_dims(np.transpose(time_series), axis=0)
+        time_series = np.moveaxis(time_series, 1, 2)
+        print(time_series.shape)
+        # Load data
+        inputs = {
+            ModalityType.IMU: torch.from_numpy(time_series).to(device),
+        }
+        with torch.no_grad():
+            embeddings = model(inputs)
 
-    time_series = extrapolated_imu_data[:,:,:6].astype(np.float32)
-    # time_series = np.expand_dims(np.transpose(time_series), axis=0)
-    time_series = np.moveaxis(time_series, 1, 2)
-    print(time_series.shape)
-    # Load data
-    inputs = {
-        ModalityType.IMU: torch.from_numpy(time_series).to(device),
-    }
-    with torch.no_grad():
-        embeddings = model(inputs)
-
-    imu_embedding = (embeddings[ModalityType.IMU].to("cpu").numpy())
-    print(imu_embedding.shape)
-    np.savetxt('dataset_imu_embedding.txt', imu_embedding, fmt='%f')
-
+        imu_embedding = (embeddings[ModalityType.IMU].to("cpu").numpy())
+        print(imu_embedding.shape)
+        # f=open(out_file,'a')
+        # np.savetxt(out_file, imu_embedding, fmt='%f')
+        final_embedding = np.concatenate((final_embedding, imu_embedding))
+        
+    np.save(out_file, final_embedding)
 
 def extrapolate_timeseries(imu_data_path):
     # preprocessor is already loaded into the forward function
     # only need to write the load_and_transform function
 
     original_data = np.load(imu_data_path)
-    time_series_length = 150
 
     # Simulating a 3D NumPy array with shape (N, 150, s)
     N = original_data.shape[0]  # Number of data points
@@ -58,10 +62,10 @@ def extrapolate_timeseries(imu_data_path):
             original_time_series = original_data[i, :, j]
 
             # Normalize the original_time_series from -1 to 1
-            normalized_time_series = np.interp(original_time_series, (original_time_series.min(), original_time_series.max()), (-1, +1))
+            # normalized_time_series = np.interp(original_time_series, (original_time_series.min(), original_time_series.max()), (-1, +1))
             # normalized_time_series = original_time_series
 
-            extrapolated_data[i, :, j] = np.interp(indices, np.arange(time_series_length), normalized_time_series)
+            extrapolated_data[i, :, j] = np.interp(indices, np.arange(time_series_length), original_time_series)
     
     plt.subplot(2, 1, 1)
     plt.plot(original_data[0,:,1], label='Original Data', marker='o')
@@ -90,16 +94,17 @@ def extrapolate_timeseries(imu_data_path):
     return extrapolated_data
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        assert False, 'Usage: python imu_embedding.py relative_data_path_to_npy_file'
+    if len(sys.argv) != 3:
+        assert False, 'Usage: python imu_embedding.py relative_data_path_to_npy_file out_file_name'
 
     data_path = sys.argv[1]
+    out_file = sys.argv[2]
     extrapolated_data = extrapolate_timeseries(data_path)
 
     
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
-    get_embeddings(extrapolated_data, device)
+    get_embeddings(extrapolated_data, device, out_file)
 
 
     # original_data = dataset[0,:,0]
