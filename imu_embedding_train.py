@@ -46,7 +46,7 @@ def get_embeddings(extrapolated_imu_data, device, out_file):
             print('imu_embedding shape: ', imu_embedding.shape)
             # f=open(out_file,'a')
             # np.savetxt(out_file, imu_embedding, fmt='%f')
-            if i == 0:
+            if i == 0 and j == 0:
                 final_embedding = imu_embedding
             else:
                 final_embedding = np.concatenate((final_embedding, imu_embedding))
