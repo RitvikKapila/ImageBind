@@ -44,7 +44,7 @@ def get_embeddings(extrapolated_imu_data, device, out_file):
         
     np.save(out_file, final_embedding)
 
-def extrapolate_timeseries(imu_data_path):
+def extrapolate_timeseries(imu_data_path, out_file):
     # preprocessor is already loaded into the forward function
     # only need to write the load_and_transform function
 
@@ -98,7 +98,7 @@ def extrapolate_timeseries(imu_data_path):
 
     plt.tight_layout()  # Adjust subplots for better spacing
 
-    plt.savefig("extrapolated_data_plot_for_all.png")
+    plt.savefig(outfile + ".png")
     return extrapolated_data
 
 if __name__ == '__main__':
@@ -108,7 +108,7 @@ if __name__ == '__main__':
     print(sys.argv)
     data_path = sys.argv[1]
     out_file = sys.argv[2]
-    extrapolated_data = extrapolate_timeseries(data_path)
+    extrapolated_data = extrapolate_timeseries(data_path, out_file)
 
     
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
