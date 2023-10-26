@@ -13,34 +13,45 @@ def get_embeddings(extrapolated_imu_data, device, out_file):
     model.eval()
     model.to(device)
 
+    batch_size = 200
+
     N = extrapolated_imu_data.shape[0]  # Number of data points
+    num_batches = N / batch_size
+    if(N%batch_size != 0):
+        batch_size += 1
+
     final_embedding = np.array([[]])
     # change for different dataset
     for i in range(0, 5):
         print(i*9, i*9+6)
-        # change for different dataset
-        time_series = extrapolated_imu_data[:,:,i*9:i*9+6].astype(np.float32)
-        # time_series = np.expand_dims(np.transpose(time_series), axis=0)
-        # change for different dataset
-        time_series = np.moveaxis(time_series, 1, 2)
-        print('time_series shape: ', time_series.shape)
-        # Load data
-        inputs = {
-            ModalityType.IMU: torch.from_numpy(time_series).to(device),
-        }
-        with torch.no_grad():
-            embeddings = model(inputs)
+        for j in range(0, num_batches)
 
-        imu_embedding = (embeddings[ModalityType.IMU].to("cpu").numpy())
-        print('imu_embedding shape: ', imu_embedding.shape)
-        # f=open(out_file,'a')
-        # np.savetxt(out_file, imu_embedding, fmt='%f')
-        if i == 0:
-            final_embedding = imu_embedding
-        else:
-            final_embedding = np.concatenate((final_embedding, imu_embedding))
+            start_batch = j * batch_size
+            end_batch = min(N, (j+1)*batch_size)
 
-        print('final_embedding shape: ', final_embedding.shape)
+            # change for different dataset
+            time_series = extrapolated_imu_data[start_batch:end_batch,:,i*9:i*9+6].astype(np.float32)
+            # time_series = np.expand_dims(np.transpose(time_series), axis=0)
+            # change for different dataset
+            time_series = np.moveaxis(time_series, 1, 2)
+            print('time_series shape: ', time_series.shape)
+            # Load data
+            inputs = {
+                ModalityType.IMU: torch.from_numpy(time_series).to(device),
+            }
+            with torch.no_grad():
+                embeddings = model(inputs)
+
+            imu_embedding = (embeddings[ModalityType.IMU].to("cpu").numpy())
+            print('imu_embedding shape: ', imu_embedding.shape)
+            # f=open(out_file,'a')
+            # np.savetxt(out_file, imu_embedding, fmt='%f')
+            if i == 0:
+                final_embedding = imu_embedding
+            else:
+                final_embedding = np.concatenate((final_embedding, imu_embedding))
+
+            print('final_embedding shape: ', final_embedding.shape)
         
     np.save(out_file, final_embedding)
 
