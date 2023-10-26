@@ -24,7 +24,7 @@ def get_embeddings(extrapolated_imu_data, device, out_file):
     # change for different dataset
     for i in range(0, 5):
         print(i*9, i*9+6)
-        for j in range(0, num_batches)
+        for j in range(0, num_batches):
 
             start_batch = j * batch_size
             end_batch = min(N, (j+1)*batch_size)
