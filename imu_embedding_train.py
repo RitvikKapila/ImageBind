@@ -19,7 +19,7 @@ def get_embeddings(extrapolated_imu_data, device, out_file):
     num_batches = int(N / batch_size)
     if(N%batch_size != 0):
         batch_size += 1
-
+    print(batch_size, num_batches)
     final_embedding = np.array([[]])
     # change for different dataset
     for i in range(0, 5):
@@ -28,7 +28,7 @@ def get_embeddings(extrapolated_imu_data, device, out_file):
 
             start_batch = j * batch_size
             end_batch = min(N, (j+1)*batch_size)
-
+            print(start_batch, end_batch)
             # change for different dataset
             time_series = extrapolated_imu_data[start_batch:end_batch,:,i*9:i*9+6].astype(np.float32)
             # time_series = np.expand_dims(np.transpose(time_series), axis=0)
