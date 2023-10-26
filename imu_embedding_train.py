@@ -14,13 +14,16 @@ def get_embeddings(extrapolated_imu_data, device, out_file):
     model.to(device)
 
     N = extrapolated_imu_data.shape[0]  # Number of data points
-    final_embedding = np.array([])
+    final_embedding = np.array([[]])
+    # change for different dataset
     for i in range(0, 5):
         print(i*9, i*9+6)
+        # change for different dataset
         time_series = extrapolated_imu_data[:,:,i*9:i*9+6].astype(np.float32)
         # time_series = np.expand_dims(np.transpose(time_series), axis=0)
+        # change for different dataset
         time_series = np.moveaxis(time_series, 1, 2)
-        print(time_series.shape)
+        print('time_series shape: ', time_series.shape)
         # Load data
         inputs = {
             ModalityType.IMU: torch.from_numpy(time_series).to(device),
@@ -29,7 +32,7 @@ def get_embeddings(extrapolated_imu_data, device, out_file):
             embeddings = model(inputs)
 
         imu_embedding = (embeddings[ModalityType.IMU].to("cpu").numpy())
-        print(imu_embedding.shape)
+        print('imu_embedding shape: ', imu_embedding.shape)
         # f=open(out_file,'a')
         # np.savetxt(out_file, imu_embedding, fmt='%f')
         final_embedding = np.concatenate((final_embedding, imu_embedding))
