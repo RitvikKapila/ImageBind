@@ -15,7 +15,7 @@ def get_embeddings(extrapolated_imu_data, device, out_file):
 
     batch_size = 200
 
-    N = extrapolated_imu_data.shape[0]  # Number of data points
+    N = extrapolated_imu_data.shape[0] # Number of data points
     num_batches = int(N / batch_size)
     if(N%batch_size != 0):
         num_batches += 1
@@ -84,7 +84,14 @@ def extrapolate_timeseries(imu_data_path, out_file):
             # normalized_time_series = np.interp(original_time_series, (original_time_series.min(), original_time_series.max()), (-1, +1))
             # normalized_time_series = original_time_series
 
-            extrapolated_data[i, :, j] = np.interp(indices, np.arange(time_series_length), original_time_series)
+            # Extrapolate data from 150 dim for Opp_g to 2000 dim
+            # extrapolated_data[i, :, j] = np.interp(indices, np.arange(time_series_length), original_time_series)
+
+            # Repeat data
+            repeat_times = (desired_points) // time_series_length + 1
+            repeated_time_series = np.tile(original_time_series, desired_points)
+            extrapolated_data[i, :, j] = repeated_time_series[:desired_points]
+            assert(len(extrapolated_data[i, :, j]) == desired_points)
     
     plt.subplot(2, 1, 1)
     plt.plot(original_data[0,:,1], label='Original Data', marker='o')
